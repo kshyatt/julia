@@ -103,6 +103,22 @@ jl_compileropts_t jl_compileropts = { NULL, // julia_home
                                       1,    // depwarn
 };
 
+jl_options_t jl_options = { 0,    // version
+                            0,    // quiet
+                            NULL, // eval
+                            NULL, // print
+                            NULL, // postboot
+                            NULL, // load
+                            0,    // nprocs
+                            NULL, // machinefile
+                            0,    // isinteractive
+                            0,    // color
+                            0,    // historyfile
+                            0,    // startupfile
+                            0,    // worker
+                            NULL, // bindto
+};
+
 int jl_boot_file_loaded = 0;
 int exit_on_sigint = 0;
 

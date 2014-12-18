@@ -1161,6 +1161,7 @@ function tmerge(typea::ANY, typeb::ANY)
     return u
 end
 
+
 tchanged(n::ANY, o::ANY) = is(o,NF) || (!is(n,NF) && !(n <: o))
 
 stupdate(state::(), changes::VarTable, vars) = copy(changes)

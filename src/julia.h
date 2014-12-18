@@ -1315,6 +1315,7 @@ void jl_print_gc_stats(JL_STREAM *s);
 // debugging
 void show_execution_point(char *filename, int lno);
 
+
 // compiler options -----------------------------------------------------------
 
 typedef struct {
@@ -1343,6 +1344,7 @@ extern DLLEXPORT jl_compileropts_t jl_compileropts;
 #define JL_COMPILEROPT_CHECK_BOUNDS_DEFAULT 0
 #define JL_COMPILEROPT_CHECK_BOUNDS_ON 1
 #define JL_COMPILEROPT_CHECK_BOUNDS_OFF 2
+
 #define JL_COMPILEROPT_COMPILE_DEFAULT 1
 #define JL_COMPILEROPT_COMPILE_OFF 0
 #define JL_COMPILEROPT_COMPILE_ON  1
@@ -1350,6 +1352,36 @@ extern DLLEXPORT jl_compileropts_t jl_compileropts;
 
 #define JL_COMPILEROPT_DUMPBITCODE_ON 1
 #define JL_COMPILEROPT_DUMPBITCODE_OFF 2
+
+// julia options --------------------------------------------------------------
+
+typedef struct {
+    int8_t version;
+    int8_t quiet;
+    const char *eval;
+    const char *print;
+    const char *postboot;
+    const char *load;
+    long nprocs;
+    const char *machinefile;
+    int8_t isinteractive;
+    int8_t color;
+    int8_t historyfile;
+    int8_t startupfile;
+    int8_t worker;
+    const char *bindto;
+} jl_options_t;
+
+extern DLLEXPORT jl_options_t jl_options;
+
+#define JL_OPTIONS_COLOR_ON 1
+#define JL_OPTIONS_COLOR_OFF 2
+
+#define JL_OPTIONS_HISTORYFILE_ON 1
+#define JL_OPTIONS_HISTORYFILE_OFF 0
+
+#define JL_OPTIONS_STARTUPFILE_ON 1
+#define JL_OPTIONS_STARTUPFILE_OFF 2
 
 // Version information
 #include "julia_version.h"
