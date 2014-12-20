@@ -58,10 +58,16 @@
    :maxdepth: 1
 
    stdlib/base
-   stdlib/sparse
+   stdlib/collections
+   stdlib/math
+   stdlib/numbers
+   stdlib/strings
+   stdlib/arrays
+   stdlib/parallel
    stdlib/linalg
    stdlib/constants
    stdlib/file
+   stdlib/io
    stdlib/punctuation
    stdlib/sort
    stdlib/pkg
@@ -69,6 +75,7 @@
    stdlib/graphics
    stdlib/dates
    stdlib/test
+   stdlib/c
    stdlib/profile
 
 .. _devdocs:
