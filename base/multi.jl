@@ -1214,7 +1214,6 @@ function launch(manager::LocalManager, params::Dict, launched::Array, c::Conditi
     dir = params[:dir]
     exename = params[:exename]
     exeflags = params[:exeflags]
-
     for i in 1:manager.np
         io, pobj = open(detach(setenv(`$(julia_cmd(exename)) $exeflags --bind-to $(LPROC.bind_addr) --worker`, dir=dir)), "r")
         wconfig = WorkerConfig()
@@ -1222,7 +1221,6 @@ function launch(manager::LocalManager, params::Dict, launched::Array, c::Conditi
         wconfig.io = io
         push!(launched, wconfig)
     end
-
     notify(c)
 end
 
@@ -1851,4 +1849,3 @@ function terminate_all_workers()
         end
     end
 end
-

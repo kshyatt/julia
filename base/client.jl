@@ -200,10 +200,8 @@ end
 # try to include() a file, ignoring if not found
 try_include(path::AbstractString) = isfile(path) && include(path)
 
-function init_bind_addr()
-    # Treat --bind-to in a position independent manner in ARGS since
-    # --worker, -n and --machinefile options are affected by it
-    opts = unsafe_load(cglobal(:jl_options, JLOptions))
+# initialize the local proc network address / port
+function init_bind_addr(opts::JLOptions)
     if opts.bindto != C_NULL
         bind_to = split(bytestring(opts.bindto), ":")
         bind_addr = string(parseip(bind_to[1]))
@@ -247,7 +245,7 @@ let reqarg = Set(UTF8String["--home",          "-H",
                             "--build",        "-b",
                             "--bind-to"])
     global process_options
-    function process_options(args::Vector{UTF8String})
+    function process_options(opts::JLOptions, args::Vector{UTF8String})
         if !isempty(args) && (arg = first(args); arg[1] == '-' && in(arg, reqarg))
             println(STDERR, "julia: option `$arg` is missing an argument")
             exit(1)
@@ -359,6 +357,8 @@ function init_load_path()
     push!(LOAD_PATH,abspath(JULIA_HOME,"..","share","julia","site",vers))
 end
 
+# start local process as head "master" process with process id  1
+# register this process as a local worker
 function init_head_sched()
     # start in "head node" mode
     global PGRP
@@ -402,6 +402,8 @@ function early_init()
     end
 end
 
+# starts the gc message task (for distrubuted gc) and
+# registers worker process termination method
 function init_parallel()
     start_gc_msgs_task()
     atexit(terminate_all_workers)
@@ -411,11 +413,13 @@ import .Terminals
 import .REPL
 
 function _start()
+    opts = unsafe_load(cglobal(:jl_options, JLOptions))
     try
         init_parallel()
-        init_bind_addr()
-        any(a->(a=="--worker"), ARGS) || init_head_sched()
-        (quiet,repl,startup,color_set,no_history_file) = process_options(copy(ARGS))
+        init_bind_addr(opts)
+        # if this process is not a worker,
+        bool(opts.worker) || init_head_sched()
+        (quiet,repl,startup,color_set,no_history_file) = process_options(opts,copy(ARGS))
 
         local term
         global active_repl
