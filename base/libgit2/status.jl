@@ -15,7 +15,7 @@ end
 
 function Base.getindex(status::GitStatus, i::Csize_t)
     if i < 1 || i > length(status)
-        throw(BoundsError())
+        throw(BoundsError(status,i))
     end
     entry_ptr = ccall((:git_status_byindex, :libgit2), Ptr{Void},
                        (Ptr{Void}, Csize_t), status.ptr, i-1)
